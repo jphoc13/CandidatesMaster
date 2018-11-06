@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+<head>
+<--TO DO Capture the table into a div or another container so it can be scrollable.
+ Build proper CSS sheets for the table-->
+</head>
+<body style="color:blue;">
+
+
+
+<script type="text/javascript">
+
+function postData() {
+    $.ajax({
+        type: "GET",
+        url: "/receiver",
+        success: callbackFunc
+    });
+}
+var globalResponse;
+function callbackFunc(response) {
+    globalResponse = response
+    console.log("Creating Table")
+    createTable(globalResponse)
+}
+postData()
+
+function createTable(globalResponse){
+    globalResponse = JSON.stringify(eval(globalResponse));
+    globalResponse = JSON.parse(globalResponse);
+    console.log("Creating Headers")
+    table = createHeaders()
+    console.log("Creating Table Body")
+    for (var i = 0; i < globalResponse.length; i++){
+     table = populateTable(table, globalResponse, i)
+    }
+    var iDiv = document.createElement('div');
+    iDiv.setAttribute("id", "candidateDiv");
+    iDiv.setAttribute("style","width:500px");
+    iDiv.setAttribute("style","height:500px");
+    iDiv.appendChild(table)
+    document.body.appendChild(table);
+    console.log("Table populated")
+    }
+
+function createHeaders(){
+
+    var table = document.createElement('table');
+    table.setAttribute("id", "candidateTable");
+    var fieldArray = ["Candidate Name", "State", "District", "Party", "Total Received"];
+    var tr = document.createElement('tr');
+
+    for (var i = 0; i < fieldArray.length; i++){
+        var textNode = document.createTextNode(fieldArray[i])
+        var td1 = document.createElement('td');
+        td1.style.border = '1px solid black';
+        td1.style.fontWeight = "bold";
+        td1.appendChild(textNode);
+        var text = fieldArray[i]
+        td1.addEventListener("click", addService(text), false)
+        tr.appendChild(td1);
+    }
+    table.appendChild(tr);
+    return table;
+}
+
+function addService(text){
+    return function(){
+     $.ajax({
+                type: "POST",
+                url: "/sorter",
+                data: JSON.stringify(text),
+                success: receiveSortedData,
+                error: function(e) {
+                console.log("ERRORS:")
+                console.log(e);
+                   },
+                dataType: "json",
+                contentType: "application/json"
+             });
+             }
+}
+
+function receiveSortedData(sortedData){
+    <!--var candidateTable = document.getElementById(candidateTable);-->
+    while(table.rows.length > 0) {
+        table.deleteRow(0);
+}
+    createTable(sortedData)
+}
+
+function populateTable(table, globalResponse, i){
+     var tr = document.createElement('tr');
+     var fieldArray = ["Candidate Name", "State", "District", "Party", "Total Received"];
+     for (var j = 0; j < fieldArray.length; j++){
+        var td1 = document.createElement('td');
+        <!--var text1 = document.createTextNode(globalResponse[i][j][fieldArray[j]]);-->
+        var text1 = document.createTextNode(globalResponse[i][j]);
+        td1.style.border = '1px solid black';
+        td1.appendChild(text1);
+        tr.appendChild(td1);
+     }
+    table.appendChild(tr);
+    return table;
+}
+</script>
+</body>
+</html>
