@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+
 <head>
-<--TO DO Capture the table into a div or another container so it can be scrollable.
- Build proper CSS sheets for the table-->
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+ <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/Candidate.css') }}">
 </head>
-<body style="color:blue;">
+<body>
 
 
 
@@ -53,9 +53,9 @@ function createHeaders(){
 
     for (var i = 0; i < fieldArray.length; i++){
         var textNode = document.createTextNode(fieldArray[i])
-        var td1 = document.createElement('td');
-        td1.style.border = '1px solid black';
-        td1.style.fontWeight = "bold";
+        var td1 = document.createElement('th');
+        <!--td1.style.border = '1px solid black';-->
+        <!--td1.style.fontWeight = "bold";-->
         td1.appendChild(textNode);
         var text = fieldArray[i]
         td1.addEventListener("click", addService(text), false)
