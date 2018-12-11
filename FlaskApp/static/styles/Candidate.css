@@ -1,9 +1,4 @@
-th {
-  padding-top: 12px;
-  padding-bottom: 12px;
-  text-align: left;
-  background-color: #4CAF50;
-  color: green;
-  border: 1px solid #ddd;
-  padding: 8px;
+body {
+    background-color: lightblue;
 }
+
